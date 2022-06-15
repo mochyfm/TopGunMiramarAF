@@ -1,11 +1,50 @@
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+
+        final String filePath = "data/plane.dat";
+
+        FileInputStream inputStream = null;
+        BufferedInputStream bufferedInput = null;
+        ObjectInputStream objectInput = null;
+
+        Plane f18 = null;
+
+        try {
+
+            inputStream = new FileInputStream(filePath);
+            bufferedInput = new BufferedInputStream(inputStream);
+            objectInput = new ObjectInputStream(bufferedInput);
+
+            try {
+
+                f18 = (Plane) objectInput.readObject();
+
+                System.out.println("\n" + Colors.ANSI_GREEN + "SUCCESS: Se ha cargado el archivo guardado correctamente." + Colors.RESET);
+
+            } catch (IOException e) {
+                System.out.println("\n" + Colors.ANSI_RED + "ERROR: Se ha producido un error en la E/S" + Colors.RESET);
+            } catch (ClassNotFoundException e) {
+                System.out.println("\n" + Colors.ANSI_RED + "ERROR: Se ha producido un error intentando leer la información" + Colors.RESET);
+            }
+
+        } catch (FileNotFoundException ex) {
+            System.out.println("\n" + Colors.ANSI_YELLOW + "WARNING: No se ha encontrado un archivo con datos " +
+                    "guardados, se creará uno al cerrar por voluntad la sesion" + Colors.RESET);
+        } catch (IOException e) {
+            System.out.println("\n" + Colors.ANSI_RED + "ERROR: Se ha producido un error en la E/S" + Colors.RESET);
+        }
+
+
+
+        FileOutputStream outputFile = null;
+        BufferedOutputStream bufferedOutput = null;
+        ObjectOutputStream objectOutput = null;
 
         Scanner scanner = new Scanner(System.in);
         boolean out = false;
-        Plane f18 = new Plane(0,"","");
 
         while (!out) {
 
@@ -17,7 +56,7 @@ public class Main {
             System.out.println("5. Eyectar piloto. ");
             System.out.println("Q. Salir");
             System.out.println("\n");
-            System.out.println("En caso de pulsar cualquier otra opción, si hay un avión ya creado " +
+            System.out.println("En caso de pulsar cualquier otro número, si hay un avión ya creado " +
                     "se mostrará su información.");
             System.out.println("\n");
 
@@ -80,6 +119,28 @@ public class Main {
 
                 case "Q":
                 case "q":
+
+                    try {
+
+                        outputFile = new FileOutputStream(filePath);
+                        bufferedOutput = new BufferedOutputStream(outputFile);
+                        objectOutput = new ObjectOutputStream(bufferedOutput);
+
+                        objectOutput.writeObject(f18);
+
+                    } catch (FileNotFoundException e) {
+                        System.out.println("\n" + Colors.ANSI_RED + "ERROR: La ruta marcada no existe" + Colors.RESET);
+                    } catch (IOException e) {
+                        System.out.println("\n" + Colors.ANSI_RED + "ERROR: Se ha producido un error en la E/S" + Colors.RESET);
+                    } finally {
+                        try  {
+                            if (objectOutput != null) objectOutput.close();
+                            if (bufferedOutput != null) objectOutput.close();
+                            if (outputFile != null) objectOutput.close();
+                        } catch (IOException e) {
+                            System.out.println("\n" + Colors.ANSI_RED + "ERROR: No se ha podido cerrar el archivo" + Colors.RESET);
+                        }
+                    }
 
                     out = true;
 
