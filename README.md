@@ -8,6 +8,10 @@ El principal problema radica en que, una vez en vuelo, si el sistema se reinicia
 
 Desde la base aérea de Miramar se nos pide que desarrollemos un software que cumpla con los siguientes requisitos.
 
+<p align="center">
+    <img src="https://cdn.akamai.steamstatic.com/steam/apps/1692462/capsule_616x353.jpg?t=1637110860" alt="Imagen F18">
+</p>
+
 Nuestro programa debe modelar el estado de los siguientes elementos de un F18:
 Nivel de combustible.
 Estado de los flaps.
